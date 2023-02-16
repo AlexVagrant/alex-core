@@ -517,7 +517,11 @@ export type BlockCodegenNode = VNodeCall | RenderSlotCall
 
 export interface IfConditionalExpression extends ConditionalExpression {
   consequent: BlockCodegenNode | MemoExpression
-  alternate: BlockCodegenNode | IfConditionalExpression | MemoExpression
+  alternate:
+    | BlockCodegenNode
+    | IfConditionalExpression
+    | MemoExpression
+    | CacheExpression
 }
 
 export interface ForCodegenNode extends VNodeCall {

@@ -37,7 +37,7 @@ import {
   makeBlock
 } from '../utils'
 import { PatchFlags, PatchFlagNames } from '@vue/shared'
-import { getMemoedVNodeCall } from '..'
+import { getMemoedOrOnceVNodeCall } from '..'
 
 export const transformIf = createStructuralDirectiveTransform(
   /^(if|else|else-if)$/,
@@ -224,7 +224,11 @@ function createCodegenNodeForBranch(
   branch: IfBranchNode,
   keyIndex: number,
   context: TransformContext
-): IfConditionalExpression | BlockCodegenNode | MemoExpression {
+):
+  | IfConditionalExpression
+  | BlockCodegenNode
+  | MemoExpression
+  | CacheExpression {
   if (branch.condition) {
     return createConditionalExpression(
       branch.condition,
@@ -245,7 +249,7 @@ function createChildrenCodegenNode(
   branch: IfBranchNode,
   keyIndex: number,
   context: TransformContext
-): BlockCodegenNode | MemoExpression {
+): BlockCodegenNode | MemoExpression | CacheExpression {
   const { helper } = context
   const keyProperty = createObjectProperty(
     `key`,
@@ -298,7 +302,8 @@ function createChildrenCodegenNode(
     const ret = (firstChild as ElementNode).codegenNode as
       | BlockCodegenNode
       | MemoExpression
-    const vnodeCall = getMemoedVNodeCall(ret)
+      | CacheExpression
+    const vnodeCall = getMemoedOrOnceVNodeCall(ret)
     // Change createVNode to createBlock.
     if (vnodeCall.type === NodeTypes.VNODE_CALL) {
       makeBlock(vnodeCall, context)

@@ -23,7 +23,8 @@ import {
   VNodeCall,
   SimpleExpressionNode,
   BlockCodegenNode,
-  MemoExpression
+  MemoExpression,
+  CacheExpression
 } from './ast'
 import { TransformContext } from './transform'
 import {
@@ -525,9 +526,13 @@ export function hasScopeRef(
   }
 }
 
-export function getMemoedVNodeCall(node: BlockCodegenNode | MemoExpression) {
+export function getMemoedOrOnceVNodeCall(
+  node: BlockCodegenNode | MemoExpression | CacheExpression
+): VNodeCall | RenderSlotCall {
   if (node.type === NodeTypes.JS_CALL_EXPRESSION && node.callee === WITH_MEMO) {
     return node.arguments[1].returns as VNodeCall
+  } else if (node.type === NodeTypes.JS_CACHE_EXPRESSION) {
+    return node.value as VNodeCall
   } else {
     return node
   }
