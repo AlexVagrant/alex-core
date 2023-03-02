@@ -13,8 +13,7 @@ describe('compiler: parse', () => {
     it('should preserve whitespaces in elements', () => {
       const ast = parse(`<span> </span>`)
       expect(ast.children.length).toBe(1)
-      console.log(2068, ast.children, (ast.children[0] as ElementNode).children)
-      // expect((ast.children[0] as ElementNode).children.length).toBe(1)
+      expect((ast.children[0] as ElementNode).children.length).toBe(1)
     })
   })
 })

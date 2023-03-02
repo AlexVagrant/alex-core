@@ -268,18 +268,18 @@ function parseChildren(
             // - (condense mode) the whitespace is between comment and element, or:
             // - (condense mode) the whitespace is between two elements AND contains newline
             if (
-              !prev ||
-              !next ||
-              (shouldCondense &&
-                ((prev.type === NodeTypes.COMMENT &&
+              shouldCondense &&
+              (!prev ||
+                !next ||
+                (prev.type === NodeTypes.COMMENT &&
                   next.type === NodeTypes.COMMENT) ||
-                  (prev.type === NodeTypes.COMMENT &&
-                    next.type === NodeTypes.ELEMENT) ||
-                  (prev.type === NodeTypes.ELEMENT &&
-                    next.type === NodeTypes.COMMENT) ||
-                  (prev.type === NodeTypes.ELEMENT &&
-                    next.type === NodeTypes.ELEMENT &&
-                    /[\r\n]/.test(node.content))))
+                (prev.type === NodeTypes.COMMENT &&
+                  next.type === NodeTypes.ELEMENT) ||
+                (prev.type === NodeTypes.ELEMENT &&
+                  next.type === NodeTypes.COMMENT) ||
+                (prev.type === NodeTypes.ELEMENT &&
+                  next.type === NodeTypes.ELEMENT &&
+                  /[\r\n]/.test(node.content)))
             ) {
               removedWhitespace = true
               nodes[i] = null as any
